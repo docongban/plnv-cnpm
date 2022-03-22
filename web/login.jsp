@@ -24,9 +24,7 @@
                 <span class="form-message"></span>
             </div>
 
-            <button class="form-submit ">Đăng nhập
-                <span><i class="fa-solid fa-arrow-right"></i></span>
-            </button>
+            <button class="form-submit ">Đăng nhập</button>
             <a href="#" class="forget">Quên mật khẩu</a>
         </form> 
      </div> 

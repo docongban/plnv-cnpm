@@ -113,6 +113,30 @@ public class DAO {
         return maxproducts;
     }
     
+    public List<Product> searchProductByName(String title){
+        List<Product> list=new ArrayList<>();
+        String query = "select * from products where title like ? ";
+        
+        try {
+            conn = new DBConnection().getDBConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, "%"+title+"%");
+            
+            rs = ps.executeQuery();
+            while(rs.next()){
+                list.add( new Product(rs.getInt(1),
+                rs.getString(2),
+                rs.getDouble(3),
+                rs.getString(4),
+                rs.getString(5),
+                rs.getInt(6)));
+            }
+        } catch (Exception e) {
+        }
+        
+        return list;
+    }
+    
     //test
     public static void main(String[] args) {
         DAO dao=new DAO();
@@ -122,5 +146,9 @@ public class DAO {
 
 //        dao.insertMaxProductsUpdate("111");
 //        System.out.println(dao.getNewMaxProductsUpdate());
+        List<Product> list = dao.searchProductByName("nike");
+        for(Product p: list){
+            System.out.println(p.getTitle());
+        }
     }
 }
