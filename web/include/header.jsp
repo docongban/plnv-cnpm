@@ -60,7 +60,7 @@
                 Chức năng chính
               </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="productsupdate.jsp">Cập nhật sản phẩm bán được</a></li>
+                    <li><a class="dropdown-item" href="product">Cập nhật sản phẩm bán được</a></li>
                     <li><a class="dropdown-item" href="#">Xem bảng chấm công</a></li>
                     <li><a class="dropdown-item" href="#">Xem lương thưởng cá nhân</a></li>
                 </ul>

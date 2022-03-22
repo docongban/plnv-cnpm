@@ -6,10 +6,11 @@
 package control;
 
 import dao.DAO;
-import enity.Product;
+import enity.*;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,8 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author docon
  */
-@WebServlet(name = "SearchProductByNameControl", urlPatterns = {"/search-product-by-name"})
-public class SearchProductByNameControl extends HttpServlet {
+@WebServlet(name = "InsertProductsUpdateControl", urlPatterns = {"/insert-products-update"})
+public class InsertProductsUpdateControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,17 +36,39 @@ public class SearchProductByNameControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        request.setCharacterEncoding("UTF-8");
-        
-        String title = request.getParameter("title");
-        
-        
-        DAO dao=new DAO();
-        List<Product> list =dao.searchProductByName(title);
-        
-        request.setAttribute("list", list);
-        request.getRequestDispatcher("productsupdate.jsp").forward(request, response);
+        try(PrintWriter out= response.getWriter() ) {
+            
+            ArrayList<ListProductsUpdate> cart_list = (ArrayList<ListProductsUpdate>) request.getSession().getAttribute("cart-list");
+            
+            Account account = (Account) request.getSession().getAttribute("acc");
+            
+            Date d=new Date();
+            
+            if(cart_list!=null && account!=null){
+                
+                for(ListProductsUpdate c: cart_list){
+                    ProductsUpdate product =new ProductsUpdate();
+                    product.setProductId(c.getId());
+                    product.setAccountId(account.getId());
+                    product.setQuantity(c.getQuantity());
+                    product.setUpdatedDate(new java.sql.Timestamp(d.getTime()));
+                    
+                    DAO dao=new DAO();
+                    dao.insertProductsUpdate(product);
+                }
+                
+                cart_list.clear();
+                response.sendRedirect("productsupdate.jsp");
+                
+            }else{
+                if(account==null){
+                    response.sendRedirect("login.jsp");
+                }else{
+                    response.sendRedirect("productsupdate.jsp");
+                }
+            }
+        } catch (Exception e) {
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

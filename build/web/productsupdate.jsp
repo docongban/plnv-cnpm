@@ -1,5 +1,21 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="dao.DAO"%>
+<%@page import="java.util.*"%>
+<%@page import="enity.*"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%
+DecimalFormat df = new DecimalFormat(",###");
+    
+ArrayList<ListProductsUpdate> cart_list = (ArrayList<ListProductsUpdate>) session.getAttribute("cart-list");
+List<ListProductsUpdate> cartProduct = null;
+if (cart_list != null) {
+	DAO dao = new DAO();
+	cartProduct = dao.getListProducts(cart_list);
+	request.setAttribute("cart_list", cart_list);
+}
+%>
 
 <!-- Start header -->
 <jsp:include page="./include/header.jsp"></jsp:include>
@@ -15,7 +31,12 @@
                   <input type="text" name="title" style="width: 330px" class="form-control" placeholder="Nhập tên sản phẩm" aria-label="Recipient's username" aria-describedby="button-addon2">
                 <button class="btn btn-primary" type="submit" id="button-addon2">Tìm</button>
               </form>
-              <a href="listproductsupdate.jsp" class="btn btn-primary" style="margin-left: 30px;">Danh sách (1)</a>
+              <% if(cart_list == null || cart_list.size()<=0){ %>
+                <a href="listproductsupdate.jsp" class="btn btn-primary" style="margin-left: 30px;">Danh sách (0)</a>
+              <% }%>
+              <% if(cart_list != null && cart_list.size()>0){ %>
+                <a href="listproductsupdate.jsp" class="btn btn-primary" style="margin-left: 30px;">Danh sách (<%= cart_list.size()%>)</a>
+              <% }%>
             </div>
           </div>
         </div>
@@ -27,10 +48,10 @@
             <div class="card">
               <img src="${o.thumbnail}" class="card-img-top" alt="...">
               <div class="card-body">
-                <h5 class="card-title">${o.title}</h5>
+                <h5 class="card-title" style="height: 48px">${o.title}</h5>
                 <p class="card-text">${o.content}</p>
                 <h5 class="card-title" style="float: left">${o.price}đ</h5>
-                <a href="#" class="btn btn-primary" style="float: right">Thêm</a>
+                <a href="add-to-list-products?id=${o.id}" class="btn btn-primary" style="float: right">Thêm</a>
               </div>
             </div>
           </div>

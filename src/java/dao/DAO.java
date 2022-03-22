@@ -113,6 +113,28 @@ public class DAO {
         return maxproducts;
     }
     
+    public List<Product> getProduct(){
+        List<Product> list=new ArrayList<>();
+        String query = "select * from products";
+        
+        try {
+            conn = new DBConnection().getDBConnection();
+            ps = conn.prepareStatement(query);
+            
+            rs = ps.executeQuery();
+            while(rs.next()){
+                list.add( new Product(rs.getInt(1),
+                rs.getString(2),
+                rs.getDouble(3),
+                rs.getString(4),
+                rs.getString(5),
+                rs.getInt(6)));
+            }
+        } catch (Exception e) {
+        }
+        return list;
+    }
+    
     public List<Product> searchProductByName(String title){
         List<Product> list=new ArrayList<>();
         String query = "select * from products where title like ? ";
@@ -137,6 +159,59 @@ public class DAO {
         return list;
     }
     
+    public List<ListProductsUpdate> getListProducts(ArrayList<ListProductsUpdate> listProducts){
+        List<ListProductsUpdate> list = new ArrayList<ListProductsUpdate>();
+        
+        try {
+            if(listProducts.size()>0){
+                for(ListProductsUpdate c: listProducts){
+                    String query = "SELECT * FROM products where id = ?";
+                    conn = new DBConnection().getDBConnection();
+                    ps = conn.prepareStatement(query);
+                    ps.setInt(1, c.getId());
+                    
+                    rs = ps.executeQuery();
+                    while(rs.next()){
+                        ListProductsUpdate cart = new ListProductsUpdate();
+                        
+                        cart.setId(rs.getInt(1));
+                        cart.setTitle(rs.getString(2));
+                        cart.setPrice(rs.getDouble(3));
+                        cart.setThumbnail(rs.getString(4));
+                        cart.setContent(rs.getString(5));
+                        cart.setQuantity(c.getQuantity());
+                        cart.setPrices(rs.getDouble(3)*c.getQuantity());
+                        
+                        list.add(cart);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        
+        return list;
+    }
+    
+    public void insertProductsUpdate(ProductsUpdate product){
+        String query = "insert into productsupdate (id_account,id_product,quantity,updated_date) values(?,?,?,?)";
+        
+        try {
+            conn = new DBConnection().getDBConnection();
+            ps = conn.prepareStatement(query);
+            
+            Date d=new Date();
+            
+            ps.setInt(1, product.getAccountId());
+            ps.setInt(2, product.getProductId());
+            ps.setInt(3, product.getQuantity());
+            ps.setTimestamp(4, new java.sql.Timestamp(d.getTime()));
+            
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+    
     //test
     public static void main(String[] args) {
         DAO dao=new DAO();
@@ -146,9 +221,10 @@ public class DAO {
 
 //        dao.insertMaxProductsUpdate("111");
 //        System.out.println(dao.getNewMaxProductsUpdate());
-        List<Product> list = dao.searchProductByName("nike");
-        for(Product p: list){
-            System.out.println(p.getTitle());
-        }
+//        List<Product> list = dao.searchProductByName("nike");
+//        for(Product p: list){
+//            System.out.println(p.getTitle());
+//        }
+        
     }
 }
