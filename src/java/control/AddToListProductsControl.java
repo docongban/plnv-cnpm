@@ -78,7 +78,7 @@ public class AddToListProductsControl extends HttpServlet {
                 listProducts.add(cart);
                 session.setAttribute("cart-list", listProducts);
                 session.setMaxInactiveInterval(60*60*24);
-                response.sendRedirect("productsupdate.jsp");
+                response.sendRedirect("product");
             } else {
                 listProducts = cart_list;
 
@@ -90,13 +90,13 @@ public class AddToListProductsControl extends HttpServlet {
                         int quantity = c.getQuantity();
                         quantity++;
                         c.setQuantity(quantity);
-                        response.sendRedirect("productsupdate.jsp");
+                        response.sendRedirect("product");
                     }
                 }
 
                 if (!exist) {
                     listProducts.add(cart);
-                    response.sendRedirect("productsupdate.jsp");
+                    response.sendRedirect("product");
                 }
             }
         } catch (Exception e) {

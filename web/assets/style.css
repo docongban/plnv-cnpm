@@ -197,3 +197,11 @@ input::placeholder{
   color: rgba(17, 17, 17, 0.9);
   font-weight: 700;
 }
+
+.no-product{
+  text-align: center;
+  margin-top: 100px;
+  font-size: 30px;
+  font-weight: 600;
+  color: red;
+}

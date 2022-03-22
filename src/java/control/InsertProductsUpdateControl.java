@@ -58,13 +58,13 @@ public class InsertProductsUpdateControl extends HttpServlet {
                 }
                 
                 cart_list.clear();
-                response.sendRedirect("productsupdate.jsp");
+                response.sendRedirect("product");
                 
             }else{
                 if(account==null){
                     response.sendRedirect("login.jsp");
                 }else{
-                    response.sendRedirect("productsupdate.jsp");
+                    response.sendRedirect("product");
                 }
             }
         } catch (Exception e) {

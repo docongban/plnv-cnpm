@@ -42,21 +42,27 @@ if (cart_list != null) {
         </div>
 
         
-        <div class="row row-cols-1 row-cols-md-4 g-4 m-t-30">
-        <c:forEach items="${list}" var="o">
-          <div class="col">
-            <div class="card">
-              <img src="${o.thumbnail}" class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title" style="height: 48px">${o.title}</h5>
-                <p class="card-text">${o.content}</p>
-                <h5 class="card-title" style="float: left">${o.price}đ</h5>
-                <a href="add-to-list-products?id=${o.id}" class="btn btn-primary" style="float: right">Thêm</a>
-              </div>
+        <c:if test="${list.size()==0}">
+            <p class="no-product">Không có sản phẩm nào vui lòng nhập lại</p>
+        </c:if>
+            
+        <c:if test="${list.size()!=0}">
+            <div class="row row-cols-1 row-cols-md-4 g-4 m-t-30">
+                <c:forEach items="${list}" var="o">
+                  <div class="col">
+                    <div class="card">
+                      <img src="${o.thumbnail}" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <h5 class="card-title" style="height: 48px">${o.title}</h5>
+                        <p class="card-text">${o.content}</p>
+                        <h5 class="card-title" style="float: left">${String.format("%.0f",o.price)}đ</h5>
+                        <a href="add-to-list-products?id=${o.id}" class="btn btn-primary" style="float: right">Thêm</a>
+                      </div>
+                    </div>
+                  </div>
+                </c:forEach>
             </div>
-          </div>
-        </c:forEach>
-        </div>
+        </c:if>
       </div>
 
 <!-- Start footer -->

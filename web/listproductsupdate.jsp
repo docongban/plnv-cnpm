@@ -24,6 +24,13 @@ if (cart_list != null) {
     <div class="container">
         <div class="row">
             <%
+                if (cart_list == null || cart_list.size()<=0) { 
+            %>
+                <p class="no-product">Không có sản phẩm nào vui lòng chọn để tiếp tục</p>
+            <%
+            }%>
+            
+            <%
                 if (cart_list != null && cart_list.size()>0) { 
                     for (ListProductsUpdate c : cartProduct) {
             %>
@@ -34,13 +41,13 @@ if (cart_list != null) {
                       <div class="product-cart__content-title"><%=c.getTitle()%></div>
                       <div class="product-cart__content-decrip" ><%=c.getContent()%></div>
                   </div>
-                  <div class="product-cart__price-old"><%=c.getPrice()%></div>
+                  <div class="product-cart__price-old"><%=df.format(c.getPrice())%>đ</div>
 
                   <a href="quantity-dec-inc?action=dec&id=<%= c.getId()%>" class="product-cart__btn_left"><i class="fas fa-angle-left"></i></a> 
                   <input type="text" name="quantity" value="<%=c.getQuantity()%>" class="product-cart__quantity" readonly>
                   <a href="quantity-dec-inc?action=inc&id=<%= c.getId()%>" class="product-cart__btn_right"><i class="fas fa-angle-right"></i></a> 
 
-                  <div class="product-cart__price"><%=c.getPrices()%></div>
+                  <div class="product-cart__price"><%=df.format(c.getPrices())%>đ</div>
                   <a href="remove-product?id=<%= c.getId()%>" class="product-cart__delete">
                       <i class="fas fa-trash-alt"></i>
                   </a>
@@ -49,8 +56,13 @@ if (cart_list != null) {
             <%
             }}%>
         </div>
-        <a href="productsupdate.jsp" class="btn btn-primary m-t-30" style="float: left;">Thêm tiếp sản phẩm</a>
-        <a href="insert-products-update" class="btn btn-primary m-t-30" style="float: right;">Thêm</a>
+        <a href="product" class="btn btn-primary m-t-30" style="float: left;">Thêm tiếp sản phẩm</a>
+        <%
+            if (cart_list != null && cart_list.size()>0) { 
+        %>
+            <a href="insert-products-update" class="btn btn-primary m-t-30" style="float: right;">Thêm</a>
+        <%
+        }%>
       </div>
 
 <!-- Start footer -->
