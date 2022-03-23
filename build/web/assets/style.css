@@ -205,3 +205,17 @@ input::placeholder{
   font-weight: 600;
   color: red;
 }
+
+td{
+    
+  text-align: center;
+}
+td .yes {
+  color: rgb(25,135,84);
+  font-weight: 700;
+  margin: 0;
+}
+td .absent {
+  color: red;
+  margin: 0;
+}

@@ -10,6 +10,7 @@ import enity.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -43,6 +44,25 @@ public class DAO {
         } catch (Exception e) {
         }
         return null;
+    }
+    
+    public List<TimeKeeping> getDateTimeKeepingByAccountId(String accountId){
+        List<TimeKeeping> list=new ArrayList<>();
+        String query = "select * from timekeeping where id_account = ?";
+        try {
+            conn = new DBConnection().getDBConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, accountId);
+            
+            rs = ps.executeQuery();
+            while(rs.next()){
+                list.add(new TimeKeeping(rs.getInt(1),
+                rs.getInt(2),
+                rs.getDate(3)));
+            }
+        } catch (Exception e) {
+        }
+        return list;
     }
     
     public void insertSalaryUpdate(String salary){
@@ -211,7 +231,7 @@ public class DAO {
         } catch (Exception e) {
         }
     }
-    
+     
     //test
     public static void main(String[] args) {
         DAO dao=new DAO();
@@ -225,6 +245,35 @@ public class DAO {
 //        for(Product p: list){
 //            System.out.println(p.getTitle());
 //        }
+
+        List<TimeKeeping> list = dao.getDateTimeKeepingByAccountId("3");
         
+        List<Integer> listDate = new ArrayList<>();
+        List<Integer> listMonth = new ArrayList<>();
+        List<Integer> listYear = new ArrayList<>();
+        
+        LocalDate  currentdate = LocalDate.now();
+        int month=currentdate.getMonthValue(),year=currentdate.getYear();
+        
+        Calendar calendar = Calendar.getInstance();
+        for(TimeKeeping t: list){
+            Date date = t.getTime();
+            calendar.setTime(date);
+//            listDate.add(calendar.get(Calendar.DAY_OF_MONTH));
+            listMonth.add(calendar.get(Calendar.MONTH));
+            listYear.add(calendar.get(Calendar.YEAR));
+        }
+        
+        for(TimeKeeping t: list){
+            Date date = t.getTime();
+            calendar.setTime(date);
+            if(t.getTime().toString().contains(String.valueOf(month)) && 
+                    t.getTime().toString().contains(String.valueOf(year))){
+                listDate.add(calendar.get(Calendar.DAY_OF_YEAR));
+            }
+        }
+        
+        
+        System.out.println(listDate.size());
     }
 }

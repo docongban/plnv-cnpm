@@ -61,8 +61,8 @@
               </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="product">Cập nhật sản phẩm bán được</a></li>
-                    <li><a class="dropdown-item" href="#">Xem bảng chấm công</a></li>
-                    <li><a class="dropdown-item" href="#">Xem lương thưởng cá nhân</a></li>
+                    <li><a class="dropdown-item" href="time-keeping?id=${sessionScope.acc.id}">Xem bảng chấm công</a></li>
+                    <li><a class="dropdown-item" href="timekeeping.jsp">Xem lương thưởng cá nhân</a></li>
                 </ul>
             </li>
             </c:if>
