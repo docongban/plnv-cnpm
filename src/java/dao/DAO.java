@@ -112,7 +112,7 @@ public class DAO {
         }
     }
     
-    public double getNewMaxProductsUpdate(){
+    public int getNewMaxProductsUpdate(){
         int maxproducts=0;
         
         String query = "SELECT maxproducts FROM maxproductsupdate where id = (select max(id) from maxproductsupdate)";
@@ -231,6 +231,29 @@ public class DAO {
         } catch (Exception e) {
         }
     }
+    
+    public List<ProductsUpdate> getProductsUpdateByAccountId(String accountId){
+        List<ProductsUpdate> list=new ArrayList<>();
+        
+        String query = "select * from productsupdate where id_account = ?";
+        
+        try {
+            conn = new DBConnection().getDBConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, accountId);
+            
+            rs = ps.executeQuery();
+            while(rs.next()){
+                list.add(new ProductsUpdate(rs.getInt(1),
+                rs.getInt(2),
+                rs.getInt(3),
+                rs.getInt(4),
+                rs.getDate(5)));
+            }
+        } catch (Exception e) {
+        }
+        return list;
+    }
      
     //test
     public static void main(String[] args) {
@@ -246,11 +269,13 @@ public class DAO {
 //            System.out.println(p.getTitle());
 //        }
 
-        List<TimeKeeping> list = dao.getDateTimeKeepingByAccountId("3");
+        List<TimeKeeping> list = dao.getDateTimeKeepingByAccountId("4");
+        List<ProductsUpdate> listP = dao.getProductsUpdateByAccountId("4");
         
         List<Integer> listDate = new ArrayList<>();
         List<Integer> listMonth = new ArrayList<>();
         List<Integer> listYear = new ArrayList<>();
+        List<Integer> listYearNew = new ArrayList<>();
         
         LocalDate  currentdate = LocalDate.now();
         int month=currentdate.getMonthValue(),year=currentdate.getYear();
@@ -260,20 +285,37 @@ public class DAO {
             Date date = t.getTime();
             calendar.setTime(date);
 //            listDate.add(calendar.get(Calendar.DAY_OF_MONTH));
-            listMonth.add(calendar.get(Calendar.MONTH));
+//            listMonth.add(calendar.get(Calendar.MONTH));
             listYear.add(calendar.get(Calendar.YEAR));
         }
         
-        for(TimeKeeping t: list){
-            Date date = t.getTime();
-            calendar.setTime(date);
-            if(t.getTime().toString().contains(String.valueOf(month)) && 
-                    t.getTime().toString().contains(String.valueOf(year))){
-                listDate.add(calendar.get(Calendar.DAY_OF_YEAR));
+        //bo phan tu trung
+        for(Integer i : listYear){
+            if(!listYearNew.contains(i)){
+                listYearNew.add(i);
             }
         }
+        List<String> listMonthYear = new ArrayList<>();
+        String monthYear="";
         
-        
-        System.out.println(listDate.size());
+        for(Integer o: listYearNew){
+            for(int i=1;i<=12;i++){
+                monthYear+=i+"-"+o;
+                
+                int count=0;
+                for(TimeKeeping t: list){
+                    Date date = t.getTime();
+                    calendar.setTime(date);
+                    if(t.getTime().toString().contains(String.valueOf(o))){
+                        if(calendar.get(Calendar.MONTH)==(i-1)){
+                            count++;
+                        }
+                    }
+                }
+                listMonthYear.add(monthYear);
+//                monthYear+=count;
+            }
+        }
+//        System.out.println(listMonthYear.size());
     }
 }
