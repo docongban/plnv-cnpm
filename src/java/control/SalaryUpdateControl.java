@@ -8,6 +8,7 @@ package control;
 import dao.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.System.out;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -43,7 +44,7 @@ public class SalaryUpdateControl extends HttpServlet {
             request.setAttribute("salary", salary);
             request.getRequestDispatcher("salaryupdate.jsp").forward(request, response);
         }else{
-            if(!salary.matches("-?\\d+(\\.\\d+)?")){
+            if(!salary.matches("\\d+")){
                 request.setAttribute("warning", "Mức lương không thể là kí tự hoặc nhỏ hơn, bằng không ");
                 request.setAttribute("salary", salary);
                 request.getRequestDispatcher("salaryupdate.jsp").forward(request, response);
@@ -54,8 +55,8 @@ public class SalaryUpdateControl extends HttpServlet {
                     request.getRequestDispatcher("salaryupdate.jsp").forward(request, response);
                 }else{
                     dao.insertSalaryUpdate(salary);
-        
-                    request.getRequestDispatcher("index.jsp").forward(request, response);
+                    request.setAttribute("success", "Cập nhật thành công");
+                    request.getRequestDispatcher("salaryupdate.jsp").forward(request, response);
                 }
             }
         }

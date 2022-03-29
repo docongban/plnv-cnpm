@@ -19,7 +19,9 @@
         <a class="navbar-brand" href="./">Home</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              
+            
+             <c:if test="${sessionScope.acc != null}">
+                  
             <c:if test="${sessionScope.acc.isAdmin == 1 || sessionScope.acc.isAdmin == 2}">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -96,6 +98,9 @@
                 </c:if>
               </ul>
             </li>
+            
+            </c:if>
+            
           </ul>
         </div>
         

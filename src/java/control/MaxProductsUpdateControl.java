@@ -43,7 +43,7 @@ public class MaxProductsUpdateControl extends HttpServlet {
             request.setAttribute("maxproducts", maxproducts);
             request.getRequestDispatcher("maxproductsupdate.jsp").forward(request, response);
         }else{
-            if(!maxproducts.matches("-?\\d+(\\.\\d+)?")){
+            if(!maxproducts.matches("\\d+")){
                 request.setAttribute("warning", "Số lượng sản phẩm không thể là kí tự hoặc nhỏ hơn, bằng không ");
                 request.setAttribute("maxproducts", maxproducts);
                 request.getRequestDispatcher("maxproductsupdate.jsp").forward(request, response);
@@ -54,8 +54,8 @@ public class MaxProductsUpdateControl extends HttpServlet {
                     request.getRequestDispatcher("maxproductsupdate.jsp").forward(request, response);
                 }else{
                     dao.insertMaxProductsUpdate(maxproducts);
-        
-                    request.getRequestDispatcher("index.jsp").forward(request, response);
+                    request.setAttribute("success", "Cập nhật thành công");
+                    request.getRequestDispatcher("maxproductsupdate.jsp").forward(request, response);
                 }
             }
         }

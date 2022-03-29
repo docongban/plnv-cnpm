@@ -89,7 +89,7 @@ public class TimeKeepingControl extends HttpServlet {
         }
         
         request.setAttribute("listDate", listDate);
-        request.setAttribute("listDateSize", listDate.size());
+        request.setAttribute("listDateSize", listDate.size()-1);
         request.setAttribute("monthnow", month);
         request.setAttribute("yearnow", year);
 
