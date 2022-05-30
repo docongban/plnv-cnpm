@@ -5,7 +5,7 @@
  */
 package control;
 
-import dao.DAO;
+import dao.*;
 import enity.*;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -36,8 +36,8 @@ public class ProductControl extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        DAO dao = new DAO();
-        List<Product> list = dao.getProduct();
+        ProductDAO productDAO=new ProductDAO();
+        List<Product> list = productDAO.getProduct();
         
         request.setAttribute("list", list);
         request.getRequestDispatcher("productsupdate.jsp").forward(request, response);

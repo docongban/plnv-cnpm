@@ -5,7 +5,7 @@
 <!-- End header -->
 
     <div class="main">
-        <p style="padding-top: 200px; font-size: 30px;">Welcome to project made by Group 4</p>
+        <p style="padding-top: 200px; font-size: 30px;">Welcome to project made by BanDC</p>
      </div> 
 
 <!-- Start footer -->

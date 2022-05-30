@@ -5,7 +5,7 @@
  */
 package control;
 
-import dao.DAO;
+import dao.*;
 import enity.*;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -53,8 +53,8 @@ public class InsertProductsUpdateControl extends HttpServlet {
                     product.setQuantity(c.getQuantity());
                     product.setUpdatedDate(new java.sql.Timestamp(d.getTime()));
                     
-                    DAO dao=new DAO();
-                    dao.insertProductsUpdate(product);
+                    ProductsUpdateDAO productsUpdateDAO=new ProductsUpdateDAO();
+                    productsUpdateDAO.insertProductsUpdate(product);
                 }
                 
                 cart_list.clear();

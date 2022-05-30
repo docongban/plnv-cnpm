@@ -5,7 +5,7 @@
  */
 package control;
 
-import dao.DAO;
+import dao.*;
 import enity.*;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -69,9 +69,12 @@ public class TimeKeepingControl extends HttpServlet {
         
         String id = request.getParameter("id");
         
-        DAO dao=new DAO();
+        TimeKeepingDAO timeKeepingDAO=new TimeKeepingDAO();
+        TimeKeeping timeKeeping=new TimeKeeping();
+        timeKeeping.setAccountId(Integer.parseInt(id));
         
-        List<TimeKeeping> list = dao.getDateTimeKeepingByAccountId(id);
+        // lay ra tat ca ngay cong cua 1 nguoi
+        List<TimeKeeping> list = timeKeepingDAO.getDateTimeKeepingByAccountId(timeKeeping);
         
         List<Integer> listDate = new ArrayList<>();
         
@@ -89,7 +92,7 @@ public class TimeKeepingControl extends HttpServlet {
         }
         
         request.setAttribute("listDate", listDate);
-        request.setAttribute("listDateSize", listDate.size()-1);
+        request.setAttribute("listDateSize", listDate.size());
         request.setAttribute("monthnow", month);
         request.setAttribute("yearnow", year);
 

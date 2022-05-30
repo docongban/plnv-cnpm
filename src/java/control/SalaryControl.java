@@ -5,7 +5,7 @@
  */
 package control;
 
-import dao.DAO;
+import dao.*;
 import enity.*;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -43,10 +43,15 @@ public class SalaryControl extends HttpServlet {
         
         String id = request.getParameter("id");
         
-        DAO dao=new DAO();
+        TimeKeeping timeKeeping=new TimeKeeping();
+        timeKeeping.setAccountId(Integer.parseInt(id));
+        ProductsUpdate productsUpdate=new ProductsUpdate();
+        productsUpdate.setAccountId(Integer.parseInt(id));
         
-        List<TimeKeeping> list = dao.getDateTimeKeepingByAccountId(id);
-        List<ProductsUpdate> listP = dao.getProductsUpdateByAccountId(id);
+        TimeKeepingDAO timeKeepingDAO=new TimeKeepingDAO();
+        List<TimeKeeping> list = timeKeepingDAO.getDateTimeKeepingByAccountId(timeKeeping);
+        ProductsUpdateDAO productsUpdateDAO=new ProductsUpdateDAO();
+        List<ProductsUpdate> listP = productsUpdateDAO.getProductsUpdateByAccountId(productsUpdate);
         
         List<Integer> listDate = new ArrayList<>();
         List<Integer> listMonth = new ArrayList<>();
@@ -58,6 +63,7 @@ public class SalaryControl extends HttpServlet {
         int month=currentdate.getMonthValue(),year=currentdate.getYear();
         
         Calendar calendar = Calendar.getInstance();
+        // lay ra nam
         for(TimeKeeping t: list){
             Date date = t.getTime();
             calendar.setTime(date);
@@ -70,7 +76,8 @@ public class SalaryControl extends HttpServlet {
                 listYearNew.add(i);
             }
         }
-        
+        SalaryUpdateDAO salaryUpdateDAO=new SalaryUpdateDAO();
+        MaxProductUpdateDAO maxProductUpdateDAO=new MaxProductUpdateDAO();
         
         List<String> listMonthYear = new ArrayList<>();
         List<Integer> listWorkDays = new ArrayList<>();
@@ -78,8 +85,8 @@ public class SalaryControl extends HttpServlet {
         List<Integer> listOverTargetProducts = new ArrayList<>();
         List<String> listBonus = new ArrayList<>();
         List<String> listTotalSalary = new ArrayList<>();
-        double salaryMin = dao.getNewUpdateSalary();
-        int quantityMin = dao.getNewMaxProductsUpdate();
+        double salaryMin = salaryUpdateDAO.getNewUpdateSalary();
+        int quantityMin = maxProductUpdateDAO.getNewMaxProductsUpdate();
         int overTargetProducts = 0;
         int bonus = 0;
         int totalSalary = 0;
@@ -97,7 +104,7 @@ public class SalaryControl extends HttpServlet {
                         calendar.setTime(date);
                         if(t.getTime().toString().contains(String.valueOf(o))){
                             if(calendar.get(Calendar.MONTH)==(i-1)){
-                                count++;
+                                count+=1;
                             }
                         }
                     }

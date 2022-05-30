@@ -22,14 +22,14 @@ public class DAO {
     PreparedStatement ps = null;
     ResultSet rs=null;
     
-    public Account login(String phone, String pass){
+    public Account login(Account account){
         String query = "select * from accounts where phone=? and pass = ?";
         
         try {
             conn = new DBConnection().getDBConnection();
             ps = conn.prepareStatement(query);
-            ps.setString(1, phone);
-            ps.setString(2, pass);
+            ps.setString(1, account.getPhone());
+            ps.setString(2, account.getPass());
             
             rs = ps.executeQuery();
             while(rs.next()){
@@ -46,13 +46,13 @@ public class DAO {
         return null;
     }
     
-    public List<TimeKeeping> getDateTimeKeepingByAccountId(String accountId){
+    public List<TimeKeeping> getDateTimeKeepingByAccountId(TimeKeeping timeKeeping){
         List<TimeKeeping> list=new ArrayList<>();
         String query = "select * from timekeeping where id_account = ?";
         try {
             conn = new DBConnection().getDBConnection();
             ps = conn.prepareStatement(query);
-            ps.setString(1, accountId);
+            ps.setInt(1, timeKeeping.getAccountId());
             
             rs = ps.executeQuery();
             while(rs.next()){
@@ -65,13 +65,13 @@ public class DAO {
         return list;
     }
     
-    public void insertSalaryUpdate(String salary){
+    public void insertSalaryUpdate(SalaryUpdate salaryUpdate){
         String query = "insert into salaryupdate (salary) values (?)";
         
         try {
             conn = new DBConnection().getDBConnection();
             ps = conn.prepareStatement(query);
-            ps.setString(1, salary);
+            ps.setDouble(1, salaryUpdate.getSalary());
             
             ps.executeUpdate();
         } catch (Exception e) {
@@ -99,13 +99,13 @@ public class DAO {
         return salary;
     }
     
-    public void insertMaxProductsUpdate(String maxproducts){
+    public void insertMaxProductsUpdate(MaxProductsUpdate maxProductsUpdate){
         String query = "insert into maxproductsupdate (maxproducts) values (?)";
         
         try {
             conn = new DBConnection().getDBConnection();
             ps = conn.prepareStatement(query);
-            ps.setString(1, maxproducts);
+            ps.setInt(1, maxProductsUpdate.getMaxproducts());
             
             ps.executeUpdate();
         } catch (Exception e) {
@@ -155,14 +155,14 @@ public class DAO {
         return list;
     }
     
-    public List<Product> searchProductByName(String title){
+    public List<Product> searchProductByName(Product product){
         List<Product> list=new ArrayList<>();
         String query = "select * from products where title like ? ";
         
         try {
             conn = new DBConnection().getDBConnection();
             ps = conn.prepareStatement(query);
-            ps.setString(1, "%"+title+"%");
+            ps.setString(1, "%"+product.getTitle()+"%");
             
             rs = ps.executeQuery();
             while(rs.next()){
@@ -232,7 +232,7 @@ public class DAO {
         }
     }
     
-    public List<ProductsUpdate> getProductsUpdateByAccountId(String accountId){
+    public List<ProductsUpdate> getProductsUpdateByAccountId(ProductsUpdate productsUpdate){
         List<ProductsUpdate> list=new ArrayList<>();
         
         String query = "select * from productsupdate where id_account = ?";
@@ -240,7 +240,7 @@ public class DAO {
         try {
             conn = new DBConnection().getDBConnection();
             ps = conn.prepareStatement(query);
-            ps.setString(1, accountId);
+            ps.setInt(1, productsUpdate.getAccountId());
             
             rs = ps.executeQuery();
             while(rs.next()){
@@ -268,9 +268,12 @@ public class DAO {
 //        for(Product p: list){
 //            System.out.println(p.getTitle());
 //        }
-
-        List<TimeKeeping> list = dao.getDateTimeKeepingByAccountId("4");
-        List<ProductsUpdate> listP = dao.getProductsUpdateByAccountId("4");
+        TimeKeeping timeKeeping=new TimeKeeping();
+        timeKeeping.setAccountId(Integer.parseInt("4"));
+        List<TimeKeeping> list = dao.getDateTimeKeepingByAccountId(timeKeeping);
+        ProductsUpdate productsUpdate=new ProductsUpdate();
+        productsUpdate.setAccountId(Integer.parseInt("4"));
+        List<ProductsUpdate> listP = dao.getProductsUpdateByAccountId(productsUpdate);
         
         List<Integer> listDate = new ArrayList<>();
         List<Integer> listMonth = new ArrayList<>();

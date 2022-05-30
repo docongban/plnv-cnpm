@@ -5,7 +5,8 @@
  */
 package control;
 
-import dao.DAO;
+import dao.*;
+import enity.MaxProductsUpdate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -36,7 +37,7 @@ public class MaxProductsUpdateControl extends HttpServlet {
         
         String maxproducts = request.getParameter("maxproductsupdate");
         
-        DAO dao=new DAO();
+        MaxProductUpdateDAO maxProductUpdateDAO=new MaxProductUpdateDAO();
         
         if(maxproducts == null ){
             request.setAttribute("warning", "Vui lòng nhập trường này");
@@ -53,7 +54,9 @@ public class MaxProductsUpdateControl extends HttpServlet {
                     request.setAttribute("maxproducts", maxproducts);
                     request.getRequestDispatcher("maxproductsupdate.jsp").forward(request, response);
                 }else{
-                    dao.insertMaxProductsUpdate(maxproducts);
+                    MaxProductsUpdate maxProductsUpdate=new MaxProductsUpdate();
+                    maxProductsUpdate.setMaxproducts(Integer.parseInt(maxproducts));
+                    maxProductUpdateDAO.insertMaxProductsUpdate(maxProductsUpdate);
                     request.setAttribute("success", "Cập nhật thành công");
                     request.getRequestDispatcher("maxproductsupdate.jsp").forward(request, response);
                 }

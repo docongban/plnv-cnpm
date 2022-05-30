@@ -5,7 +5,7 @@
  */
 package control;
 
-import dao.DAO;
+import dao.*;
 import enity.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -39,10 +39,11 @@ public class SearchProductByNameControl extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         
         String title = request.getParameter("title");
+        Product product=new Product();
+        product.setTitle(title);
         
-        
-        DAO dao=new DAO();
-        List<Product> list =dao.searchProductByName(title);
+        ProductDAO productDAO=new ProductDAO();
+        List<Product> list =productDAO.searchProductByName(product);
         
         request.setAttribute("list", list);
         request.getRequestDispatcher("productsupdate.jsp").forward(request, response);

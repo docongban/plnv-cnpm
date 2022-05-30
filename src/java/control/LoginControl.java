@@ -5,7 +5,7 @@
  */
 package control;
 
-import dao.DAO;
+import dao.*;
 import enity.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -39,8 +39,11 @@ public class LoginControl extends HttpServlet {
         String phone = request.getParameter("phone");
         String pass = request.getParameter("password");
         
-        DAO dao=new DAO();
-        Account acc= dao.login(phone, pass);
+        AccountDAO accountDAO=new AccountDAO();
+        Account accountLogin = new Account();
+        accountLogin.setPhone(phone);
+        accountLogin.setPass(pass);
+        Account acc= accountDAO.login(accountLogin);
         
         if(acc==null){
             request.setAttribute("warning", "Đăng nhập không thành công. Vui lòng kiểm tra và thử lại");

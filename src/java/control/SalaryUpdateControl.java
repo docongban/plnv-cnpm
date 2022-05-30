@@ -5,7 +5,8 @@
  */
 package control;
 
-import dao.DAO;
+import dao.*;
+import enity.SalaryUpdate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.System.out;
@@ -38,6 +39,7 @@ public class SalaryUpdateControl extends HttpServlet {
         String salary = request.getParameter("salaryupdate");
         
         DAO dao=new DAO();
+        SalaryUpdateDAO salaryUpdateDAO=new SalaryUpdateDAO();
         
         if(salary == null ){
             request.setAttribute("warning", "Vui lòng nhập trường này");
@@ -54,7 +56,9 @@ public class SalaryUpdateControl extends HttpServlet {
                     request.setAttribute("salary", salary);
                     request.getRequestDispatcher("salaryupdate.jsp").forward(request, response);
                 }else{
-                    dao.insertSalaryUpdate(salary);
+                    SalaryUpdate salaryUpdate=new SalaryUpdate();
+                    salaryUpdate.setSalary(Double.parseDouble(salary));
+                    salaryUpdateDAO.insertSalaryUpdate(salaryUpdate);
                     request.setAttribute("success", "Cập nhật thành công");
                     request.getRequestDispatcher("salaryupdate.jsp").forward(request, response);
                 }
